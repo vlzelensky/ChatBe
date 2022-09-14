@@ -12,6 +12,7 @@ app.use(bodyParser.json());
 
 app.post('/user/register', user.register);
 app.post('/user/login', user.login);
+app.get('/user/me', user.getUser);
 
 mongoose.connect('mongodb://localhost:27017/', {
   dbName: 'chat-db',

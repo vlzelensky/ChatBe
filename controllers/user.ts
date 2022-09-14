@@ -59,3 +59,24 @@ exports.login = async function (req, res) {
     res.status(500).json({ message: 'Something went wrong, please try again' });
   }
 };
+
+exports.getUser = async function (req, res) {
+  const token = req.get('Authorization');
+  if (!token) {
+    return res.status(400).json({ message: 'token is not provided' });
+  }
+  try {
+    const data = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(data);
+    const user = await User.findOne({ _id: data.userId });
+    res.json({
+      name: user.name,
+      userName: user.userName,
+      userId: user._id,
+      email: user.email,
+      birthDate: user.birthDate,
+    });
+  } catch (e) {
+    res.status(500).json({ message: 'Invalid token' });
+  }
+};
